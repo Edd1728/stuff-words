@@ -72,22 +72,6 @@
             white-space: pre-line;
         }
 
-        .example-section {
-            margin-top: 40px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
         footer {
             text-align: center;
             margin-top: 50px;
@@ -129,20 +113,6 @@
 
         <h2>Result:</h2>
         <p id="result"></p>
-
-        <div class="example-section">
-            <h2>Examples Using "Hello World!":</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Option</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                <tbody id="example-results">
-                </tbody>
-            </table>
-        </div>
     </div>
 
     <footer>
@@ -150,14 +120,11 @@
     </footer>
 
     <script>
-        const exampleText = "Hello World!";
-
         function runReverseTool() {
             var option = document.getElementById("options").value;
             var inputText = document.getElementById("inputText").value;
             var resultText = '';
 
-            // Apply transformations based on selected option for user input
             switch (option) {
                 case "1":
                     resultText = inputText.split("").reverse().join("");
@@ -178,17 +145,21 @@
                     resultText = inputText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5");
                     break;
                 case "11":
-                    resultText = inputText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" ");
+                    resultText = inputText.split(" ").map(word => {
+                        return word.slice(1) + word[0] + 'ay';
+                    }).join(" ");
                     break;
-                case "12":
-                    resultText = inputText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
+                case "12":  // Censor profanity
+                    resultText = inputText.replace(/\b(fuck|cock|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
                         const symbols = ['@', '#', '$', '%', '!', '?'];
                         return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
                     });
                     break;
-                case "13":
-                    var profanityList = ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"];
-                    resultText = inputText.split(" ").map(word => profanityList.includes(word.toLowerCase()) ? word : '').join(" ");
+                case "13":  // Show only profanity
+                    var profanityList = ["fuck", "cock", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"];
+                    resultText = inputText.split(" ").map(word => {
+                        return profanityList.includes(word.toLowerCase()) ? word : '';
+                    }).join(" ");
                     break;
                 case "14":
                     var words = inputText.split(" ");
@@ -220,109 +191,54 @@
                     }
                     resultText = letters.join('');
                     break;
-                case "17":
-                    resultText = swapOppositeAlphabet(inputText);
+                case "17":  // Swap letters with opposite in alphabet
+                    const alphabetMap = {
+                        'a': 'z', 'b': 'y', 'c': 'x', 'd': 'w', 'e': 'v', 'f': 'u', 'g': 't', 'h': 's', 'i': 'r', 'j': 'q',
+                        'k': 'p', 'l': 'o', 'm': 'n', 'n': 'm', 'o': 'l', 'p': 'k', 'q': 'j', 'r': 'i', 's': 'h', 't': 'g',
+                        'u': 'f', 'v': 'e', 'w': 'd', 'x': 'c', 'y': 'b', 'z': 'a',
+                        'A': 'Z', 'B': 'Y', 'C': 'X', 'D': 'W', 'E': 'V', 'F': 'U', 'G': 'T', 'H': 'S', 'I': 'R', 'J': 'Q',
+                        'K': 'P', 'L': 'O', 'M': 'N', 'N': 'M', 'O': 'L', 'P': 'K', 'Q': 'J', 'R': 'I', 'S': 'H', 'T': 'G',
+                        'U': 'F', 'V': 'E', 'W': 'D', 'X': 'C', 'Y': 'B', 'Z': 'A'
+                    };
+                    resultText = inputText.split("").map(char => {
+                        return alphabetMap[char] || char;
+                    }).join("");
                     break;
-                case "18":
-                    resultText = textToBinary(inputText);
+                case "18":  // Convert to Binary
+                    resultText = inputText.split("").map(char => {
+                        return char.charCodeAt(0).toString(2).padStart(8, '0');
+                    }).join(" ");
                     break;
-                case "19":
-                    resultText = textToHexadecimal(inputText);
+                case "19":  // Convert to Hexadecimal
+                    resultText = inputText.split("").map(char => {
+                        return char.charCodeAt(0).toString(16).padStart(2, '0');
+                    }).join(" ");
                     break;
-                case "20":
+                case "20":  // Convert to Base64
                     resultText = btoa(inputText);
                     break;
-                case "21":
-                    resultText = mirrorText(inputText);
+                case "21":  // Mirror text
+                    const mirrorMap = {
+                        'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⑁', 'i': 'i', 'j': 'ᒑ',
+                        'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ', 's': 'ƨ', 't': 'ɟ',
+                        'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
+                        'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I', 'J': 'ᒐ',
+                        'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я', 'S': 'Ƨ', 'T': 'T',
+                        'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
+                    };
+                    resultText = inputText.split("").map(char => {
+                        return mirrorMap[char] || char;
+                    }).join("");
                     break;
-                case "22":
-                    resultText = mirrorText(inputText).split("").reverse().join("");
+                case "22":  // Mirror and reverse text
+                    resultText = inputText.split("").map(char => {
+                        return mirrorMap[char] || char;
+                    }).reverse().join("");
                     break;
             }
 
             document.getElementById("result").textContent = resultText;
         }
-
-        // Helper functions for transformations
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function swapOppositeAlphabet(text) {
-            const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-            const opposite = 'zyxwvutsrqponmlkjihgfedcba';
-            const swapMap = {};
-            for (let i = 0; i < alphabet.length; i++) {
-                swapMap[alphabet[i]] = opposite[i];
-                swapMap[alphabet[i].toUpperCase()] = opposite[i].toUpperCase();
-            }
-            return text.split('').map(char => swapMap[char] || char).join('');
-        }
-
-        function textToBinary(text) {
-            return text.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
-        }
-
-        function textToHexadecimal(text) {
-            return text.split('').map(char => char.charCodeAt(0).toString(16).padStart(2, '0')).join(' ');
-        }
-
-        function mirrorText(text) {
-            const mirrorMap = {
-                'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⑁', 'i': 'i', 'j': 'ᒑ',
-                'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ', 's': 'ƨ', 't': 'ɟ',
-                'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
-                'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I', 'J': 'ᒐ',
-                'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я', 'S': 'Ƨ', 'T': 'T',
-                'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
-            };
-            return text.split("").map(char => mirrorMap[char] || char).join("");
-        }
-
-        // Display the example results
-        window.onload = function() {
-            const transformations = {
-                "1": exampleText.split("").reverse().join(""),
-                "2": exampleText.split(" ").reverse().join(" "),
-                "3": exampleText.split(" ").map(word => word.split("").reverse().join("")).join(" "),
-                "8": exampleText.replace(/[aeiouAEIOU]/g, ''),
-                "9": exampleText.replace(/[^aeiouAEIOU\s]/g, ''),
-                "10": exampleText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5"),
-                "11": exampleText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" "),
-                "12": exampleText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
-                    const symbols = ['@', '#', '$', '%', '!', '?'];
-                    return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
-                }),
-                "13": exampleText.split(" ").map(word => ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"].includes(word.toLowerCase()) ? word : '').join(" "),
-                "14": shuffleArray(exampleText.split(" ")).join(" "),
-                "15": exampleText.split(" ").map(word => shuffleArray(word.split("")).join("")).join(" "),
-                "16": shuffleArray(exampleText.replace(/\s/g, '').split('')).join(''),
-                "17": swapOppositeAlphabet(exampleText),
-                "18": textToBinary(exampleText),
-                "19": textToHexadecimal(exampleText),
-                "20": btoa(exampleText),
-                "21": mirrorText(exampleText),
-                "22": mirrorText(exampleText).split("").reverse().join("")
-            };
-
-            var exampleResults = document.getElementById("example-results");
-            for (var option in transformations) {
-                var row = document.createElement("tr");
-                var optionCell = document.createElement("td");
-                var resultCell = document.createElement("td");
-
-                optionCell.textContent = "Option " + option;
-                resultCell.textContent = transformations[option];
-
-                row.appendChild(optionCell);
-                row.appendChild(resultCell);
-                exampleResults.appendChild(row);
-            }
-        };
     </script>
 </body>
 </html>
