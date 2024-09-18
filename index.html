@@ -102,8 +102,6 @@
             <option value="18">Convert to Binary</option>
             <option value="19">Convert to Hexadecimal</option>
             <option value="20">Convert to Base64</option>
-            <option value="21">Mirror Text</option>
-            <option value="22">Mirror and Reverse Text</option>
         </select>
 
         <label for="inputText">Input Text:</label>
@@ -150,13 +148,13 @@
                     }).join(" ");
                     break;
                 case "12":  // Censor profanity
-                    resultText = inputText.replace(/\b(fuck|cock|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
+                    resultText = inputText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
                         const symbols = ['@', '#', '$', '%', '!', '?'];
                         return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
                     });
                     break;
                 case "13":  // Show only profanity
-                    var profanityList = ["fuck", "cock", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"];
+                    var profanityList = ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"];
                     resultText = inputText.split(" ").map(word => {
                         return profanityList.includes(word.toLowerCase()) ? word : '';
                     }).join(" ");
@@ -216,24 +214,6 @@
                     break;
                 case "20":  // Convert to Base64
                     resultText = btoa(inputText);
-                    break;
-                case "21":  // Mirror text
-                    const mirrorMap = {
-                        'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⑁', 'i': 'i', 'j': 'ᒑ',
-                        'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ', 's': 'ƨ', 't': 'ɟ',
-                        'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
-                        'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I', 'J': 'ᒐ',
-                        'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я', 'S': 'Ƨ', 'T': 'T',
-                        'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
-                    };
-                    resultText = inputText.split("").map(char => {
-                        return mirrorMap[char] || char;
-                    }).join("");
-                    break;
-                case "22":  // Mirror and reverse text
-                    resultText = inputText.split("").map(char => {
-                        return mirrorMap[char] || char;
-                    }).reverse().join("");
                     break;
             }
 
