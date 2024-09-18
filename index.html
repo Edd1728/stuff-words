@@ -151,165 +151,171 @@
     </footer>
 
     <script>
-        const exampleText = "Hello World!";
+        <script>
+    const exampleText = "Hello World!";
 
-        function runReverseTool() {
-            const option = document.getElementById("options").value;
-            const inputText = document.getElementById("inputText").value;
-            let resultText = '';
+    function runReverseTool() {
+        const option = document.getElementById("options").value;
+        const inputText = document.getElementById("inputText").value;
+        let resultText = '';
 
-            switch (option) {
-                case "1":
-                    resultText = inputText.split("").reverse().join("");
-                    break;
-                case "2":
-                    resultText = inputText.split(" ").reverse().join(" ");
-                    break;
-                case "3":
-                    resultText = inputText.split(" ").map(word => word.split("").reverse().join("")).join(" ");
-                    break;
-                case "8":
-                    resultText = inputText.replace(/[aeiouAEIOU]/g, '');
-                    break;
-                case "9":
-                    resultText = inputText.replace(/[^aeiouAEIOU\s]/g, '');
-                    break;
-                case "10":
-                    resultText = inputText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5");
-                    break;
-                case "11":
-                    resultText = inputText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" ");
-                    break;
-                case "12":
-                    resultText = inputText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
-                        const symbols = ['@', '#', '$', '%', '!', '?'];
-                        return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
-                    });
-                    break;
-                case "13":
-                    const profanityList = ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"];
-                    resultText = inputText.split(" ").map(word => profanityList.includes(word.toLowerCase()) ? word : '').join(" ");
-                    break;
-                case "14":
-                    resultText = shuffleArray(inputText.split(" ")).join(" ");
-                    break;
-                case "15":
-                    resultText = inputText.split(" ").map(word => shuffleArray(word.split("")).join("")).join(" ");
-                    break;
-                case "16":
-                    const letters = inputText.replace(/\s/g, '').split('');
-                    shuffleArray(letters);
-                    const spacePositions = [];
-                    for (let i = 0; i < inputText.length; i++) {
-                        if (inputText[i] === ' ') spacePositions.push(i);
-                    }
-                    spacePositions.forEach(pos => letters.splice(pos, 0, ' '));
-                    resultText = letters.join('');
-                    break;
-                case "17":
-                    resultText = swapOppositeAlphabet(inputText);
-                    break;
-                case "18":
-                    resultText = textToBinary(inputText);
-                    break;
-                case "19":
-                    resultText = textToHexadecimal(inputText);
-                    break;
-                case "20":
-                    resultText = btoa(inputText);
-                    break;
-                case "21":
-                    resultText = mirrorText(inputText);
-                    break;
-                case "22":
-                    resultText = mirrorText(inputText).split("").reverse().join("");
-                    break;
-            }
-
-            document.getElementById("result").textContent = resultText;
-            updateExamples(); // Update examples after running tool
-        }
-
-        function updateExamples() {
-            const option = document.getElementById("options").value;
-            const exampleResults = document.getElementById("example-results");
-            exampleResults.innerHTML = '';
-
-            const exampleTransformations = {
-                "1": exampleText.split("").reverse().join(""),
-                "2": exampleText.split(" ").reverse().join(" "),
-                "3": exampleText.split(" ").map(word => word.split("").reverse().join("")).join(" "),
-                "8": exampleText.replace(/[aeiouAEIOU]/g, ''),
-                "9": exampleText.replace(/[^aeiouAEIOU\s]/g, ''),
-                "10": exampleText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5"),
-                "11": exampleText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" "),
-                "12": exampleText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
+        switch (option) {
+            case "1":
+                resultText = inputText.split("").reverse().join("");
+                break;
+            case "2":
+                resultText = inputText.split(" ").reverse().join(" ");
+                break;
+            case "3":
+                resultText = inputText.split(" ").map(word => word.split("").reverse().join("")).join(" ");
+                break;
+            case "8":
+                resultText = inputText.replace(/[aeiouAEIOU]/g, '');
+                break;
+            case "9":
+                resultText = inputText.replace(/[^aeiouAEIOU\s]/g, '');
+                break;
+            case "10":
+                resultText = inputText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5");
+                break;
+            case "11":
+                resultText = inputText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" ");
+                break;
+            case "12":
+                resultText = inputText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
                     const symbols = ['@', '#', '$', '%', '!', '?'];
                     return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
-                }),
-                "13": exampleText.split(" ").map(word => ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"].includes(word.toLowerCase()) ? word : '').join(" "),
-                "14": shuffleArray(exampleText.split(" ")).join(" "),
-                "15": exampleText.split(" ").map(word => shuffleArray(word.split("")).join("")).join(" "),
-                "16": shuffleArray(exampleText.replace(/\s/g, '').split('')).join(''),
-                "17": swapOppositeAlphabet(exampleText),
-                "18": textToBinary(exampleText),
-                "19": textToHexadecimal(exampleText),
-                "20": btoa(exampleText),
-                "21": mirrorText(exampleText),
-                "22": mirrorText(exampleText).split("").reverse().join("")
-            };
-
-            const currentExample = exampleTransformations[option] || "Select an option to see the example.";
-            const row = `<tr><td>${document.querySelector(`select option[value="${option}"]`).text}</td><td>${currentExample}</td></tr>`;
-            exampleResults.innerHTML = row;
+                });
+                break;
+            case "13":
+                const profanityList = ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"];
+                resultText = inputText.split(" ").map(word => profanityList.includes(word.toLowerCase()) ? word : '').join(" ");
+                break;
+            case "14":
+                resultText = shuffleArray(inputText.split(" ")).join(" ");
+                break;
+            case "15":
+                resultText = inputText.split(" ").map(word => shuffleArray(word.split("")).join("")).join(" ");
+                break;
+            case "16":
+                const letters = inputText.replace(/\s/g, '').split('');
+                shuffleArray(letters);
+                const spacePositions = [];
+                for (let i = 0; i < inputText.length; i++) {
+                    if (inputText[i] === ' ') spacePositions.push(i);
+                }
+                spacePositions.forEach(pos => letters.splice(pos, 0, ' '));
+                resultText = letters.join('');
+                break;
+            case "17":
+                resultText = swapOppositeAlphabet(inputText);
+                break;
+            case "18":
+                resultText = textToBinary(inputText);
+                break;
+            case "19":
+                resultText = textToHexadecimal(inputText);
+                break;
+            case "20":
+                resultText = btoa(inputText);
+                break;
+            case "21":
+                resultText = mirrorText(inputText);
+                break;
+            case "22":
+                resultText = mirrorText(inputText).split("").reverse().join("");
+                break;
         }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
+        document.getElementById("result").textContent = resultText;
+        updateExamples(); // Update examples after running tool
+    }
 
-        function swapOppositeAlphabet(text) {
-            const charMap = {
-                'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⩲', 'i': 'i',
-                'j': 'ᒑ', 'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ',
-                's': 'ƨ', 't': 'ɟ', 'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
-                'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I',
-                'J': 'ᒐ', 'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я',
-                'S': 'Ƨ', 'T': 'T', 'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
-            };
-            return text.split('').map(char => charMap[char] || char).join('');
-        }
+    function updateExamples() {
+        const option = document.getElementById("options").value;
+        const exampleResults = document.getElementById("example-results");
+        exampleResults.innerHTML = '';
 
-        function textToBinary(text) {
-            return text.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
-        }
+        const exampleTransformations = {
+            "1": exampleText.split("").reverse().join(""),
+            "2": exampleText.split(" ").reverse().join(" "),
+            "3": exampleText.split(" ").map(word => word.split("").reverse().join("")).join(" "),
+            "8": exampleText.replace(/[aeiouAEIOU]/g, ''),
+            "9": exampleText.replace(/[^aeiouAEIOU\s]/g, ''),
+            "10": exampleText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5"),
+            "11": exampleText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" "),
+            "12": exampleText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
+                const symbols = ['@', '#', '$', '%', '!', '?'];
+                return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
+            }),
+            "13": exampleText.split(" ").map(word => ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"].includes(word.toLowerCase()) ? word : '').join(" "),
+            "14": shuffleArray(exampleText.split(" ")).join(" "),
+            "15": exampleText.split(" ").map(word => shuffleArray(word.split("")).join("")).join(" "),
+            "16": shuffleArray(exampleText.replace(/\s/g, '').split('')).join(''),
+            "17": swapOppositeAlphabet(exampleText),
+            "18": textToBinary(exampleText),
+            "19": textToHexadecimal(exampleText),
+            "20": btoa(exampleText),
+            "21": mirrorText(exampleText),
+            "22": mirrorText(exampleText).split("").reverse().join("")
+        };
 
-        function textToHexadecimal(text) {
-            return text.split('').map(char => char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')).join(' ');
-        }
+        const currentExample = exampleTransformations[option] || "Select an option to see the example.";
+        const exampleOptionText = document.querySelector(`select option[value="${option}"]`).text;
+        const row = `<tr><td>${exampleOptionText}</td><td>${currentExample}</td></tr>`;
+        exampleResults.innerHTML = row;
 
-        function btoa(text) {
-            return window.btoa(unescape(encodeURIComponent(text)));
-        }
+        console.log("Updated examples:", exampleTransformations); // Debugging line
+        console.log("Current option:", option); // Debugging line
+        console.log("Current example:", currentExample); // Debugging line
+    }
 
-        function mirrorText(text) {
-            const mirrorMap = {
-                'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⩲', 'i': 'i',
-                'j': 'ᒑ', 'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ',
-                's': 'ƨ', 't': 'ɟ', 'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
-                'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I',
-                'J': 'ᒐ', 'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я',
-                'S': 'Ƨ', 'T': 'T', 'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
-            };
-            return text.split('').map(char => mirrorMap[char] || char).join('');
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
+        return array;
+    }
 
-        // Initial update on page load
-        updateExamples();
+    function swapOppositeAlphabet(text) {
+        const charMap = {
+            'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⩲', 'i': 'i',
+            'j': 'ᒑ', 'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ',
+            's': 'ƨ', 't': 'ɟ', 'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
+            'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I',
+            'J': 'ᒐ', 'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я',
+            'S': 'Ƨ', 'T': 'T', 'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
+        };
+        return text.split('').map(char => charMap[char] || char).join('');
+    }
+
+    function textToBinary(text) {
+        return text.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
+    }
+
+    function textToHexadecimal(text) {
+        return text.split('').map(char => char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')).join(' ');
+    }
+
+    function btoa(text) {
+        return window.btoa(unescape(encodeURIComponent(text)));
+    }
+
+    function mirrorText(text) {
+        const mirrorMap = {
+            'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⩲', 'i': 'i',
+            'j': 'ᒑ', 'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ',
+            's': 'ƨ', 't': 'ɟ', 'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
+            'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I',
+            'J': 'ᒐ', 'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я',
+            'S': 'Ƨ', 'T': 'T', 'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
+        };
+        return text.split('').map(char => mirrorMap[char] || char).join('');
+    }
+
+    // Initialize examples on page load
+    updateExamples();
     </script>
 </body>
 </html>
