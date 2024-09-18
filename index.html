@@ -1,238 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Enhanced Reverse Tool</title>
-    <script>
-        function runReverseTool() {
-            var version = document.getElementById("version").value;
-            var input = document.getElementById("inputText").value;
-            var result;
-
-            switch (version) {
-                case "1":
-                    result = reverseLetters(input);
-                    break;
-                case "2":
-                    result = reverseWordOrder(input);
-                    break;
-                case "3":
-                    result = reverseCharsInEachWord(input);
-                    break;
-                case "4":
-                    result = input.toUpperCase();  // Convert all characters to uppercase
-                    break;
-                case "5":
-                    result = input.toLowerCase();  // Convert all characters to lowercase
-                    break;
-                case "6":
-                    result = capitalizeEachWord(input);  // Capitalize the first letter of each word
-                    break;
-                case "7":
-                    result = alternateCase(input);  // Alternate between uppercase and lowercase
-                    break;
-                case "8":
-                    result = removeVowels(input);  // Remove all vowels from the input
-                    break;
-                case "9":
-                    result = removeConsonants(input);  // Remove all consonants from the input
-                    break;
-                case "10":
-                    result = convertToLeetSpeak(input);  // Convert input to leetspeak
-                    break;
-                case "11":
-                    result = convertToPigLatin(input);  // Convert input to Pig Latin
-                    break;
-                case "12":
-                    result = censorCurseWords(input);  // Censor curse words
-                    break;
-                case "13":
-                    result = showOnlyProfanity(input);  // Show only profanity
-                    break;
-                case "14":
-                    result = randomizeWordOrder(input);  // Randomize the order of words
-                    break;
-                case "15":
-                    result = randomizeLettersInEachWord(input);  // Randomize letters in each word
-                    break;
-                case "16":
-                    result = shuffleAllLettersKeepSpaces(input);  // Shuffle all letters but keep spaces
-                    break;
-                default:
-                    result = "Invalid option";
-            }
-
-            document.getElementById("result").innerText = result;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reverse Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
         }
 
-        // Reverses characters in the entire input string
-        function reverseLetters(input) {
-            return input.split("").reverse().join("");
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
 
-        // Reverses the order of words in the input string
-        function reverseWordOrder(input) {
-            return input.split(" ").reverse().join(" ");
+        h1 {
+            text-align: center;
+            color: #333;
         }
 
-        // Reverses the characters in each word, but keeps the word order intact
-        function reverseCharsInEachWord(input) {
-            return input.split(" ").map(word => word.split("").reverse().join("")).join(" ");
+        label {
+            font-size: 16px;
+            color: #555;
+            margin-top: 10px;
+            display: block;
         }
 
-        // Capitalizes the first letter of each word
-        function capitalizeEachWord(input) {
-            return input.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
         }
 
-        // Alternates between uppercase and lowercase letters
-        function alternateCase(input) {
-            let result = '';
-            for (let i = 0; i < input.length; i++) {
-                result += i % 2 === 0 ? input[i].toUpperCase() : input[i].toLowerCase();
-            }
-            return result;
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
         }
 
-        // Remove all vowels (a, e, i, o, u) from the input string
-        function removeVowels(input) {
-            return input.replace(/[aeiouAEIOU]/g, '');
+        button:hover {
+            background-color: #218838;
         }
 
-        // Remove all consonants from the input string
-        function removeConsonants(input) {
-            return input.replace(/[^aeiouAEIOU\s]/g, '');  // Only keeps vowels and spaces
+        h2 {
+            color: #333;
         }
 
-        // Convert the input string to leetspeak
-        function convertToLeetSpeak(input) {
-            const leetMapping = {
-                'a': '4', 'e': '3', 'i': '1', 'o': '0', 's': '5', 't': '7',
-                'A': '4', 'E': '3', 'I': '1', 'O': '0', 'S': '5', 'T': '7'
-            };
-            return input.split("").map(char => leetMapping[char] || char).join("");
+        #result {
+            font-size: 18px;
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            word-wrap: break-word;
+            margin-top: 20px;
+            white-space: pre-line;
         }
 
-        // Convert the input string to Pig Latin
-        function convertToPigLatin(input) {
-            const vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
-
-            return input.split(" ").map(word => {
-                // If the first letter is a vowel, append "way"
-                if (vowels.includes(word.charAt(0))) {
-                    return word + "way";
-                } else {
-                    // Find the index of the first vowel
-                    const firstVowelIndex = [...word].findIndex(letter => vowels.includes(letter));
-                    // Move all consonants before the first vowel to the end, and append "ay"
-                    return word.slice(firstVowelIndex) + word.slice(0, firstVowelIndex) + "ay";
-                }
-            }).join(" ");
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 14px;
+            color: #888;
         }
-
-        // Censor curse words and replace them with random characters like ?@!#
-        function censorCurseWords(input) {
-            const curseWords = ["fuck", "fucking", "Fucking", "fucker", "Fucker", "shit", "pussy", "bitch", "retard", "retarded", "Retarded", "Ass", "ass", "hoe", "Hoe", "faggot", "Fuck", "Shit", "Pussy", "Bitch", "Retard", "retarded", "Retarded", "Faggot", "nigger", "nigga", "Nigger", "Nigga"];  // Add more curse words here
-            const specialChars = ['?', '@', '!', '#', '$', '%', '^', '&', '*'];
-
-            // Function to shuffle the array of special characters
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            }
-
-            // Replace each curse word with a randomized string of special characters
-            return input.split(" ").map(word => {
-                if (curseWords.includes(word.toLowerCase())) {
-                    return shuffleArray([...specialChars]).slice(0, word.length).join("");
-                }
-                return word;
-            }).join(" ");
-        }
-
-        // Show only profanity, replacing non-profane words with spaces
-        function showOnlyProfanity(input) {
-            const curseWords = ["fuck", "fucking", "Fucking", "fucker", "Fucker", "shit", "pussy", "bitch", "retard", "retarded", "Retarded", "Ass", "ass", "hoe", "Hoe", "faggot", "Fuck", "Shit", "Pussy", "Bitch", "Retard", "retarded", "Retarded", "Faggot", "nigger", "nigga", "Nigger", "Nigga"];  // Add more curse words here
-
-            return input.split(" ").map(word => {
-                return curseWords.includes(word.toLowerCase()) ? word : ''.padEnd(word.length, ' ');
-            }).join(" ");
-        }
-
-        // Randomize the order of words in the input
-        function randomizeWordOrder(input) {
-            const words = input.split(" ");
-            for (let i = words.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [words[i], words[j]] = [words[j], words[i]];
-            }
-            return words.join(" ");
-        }
-
-        // Randomize the letters in each word, keeping word order intact
-        function randomizeLettersInEachWord(input) {
-            function shuffleWord(word) {
-                return word.split("").sort(() => Math.random() - 0.5).join("");
-            }
-
-            return input.split(" ").map(word => shuffleWord(word)).join(" ");
-        }
-
-        // Shuffle all letters but keep spaces at the same positions
-        function shuffleAllLettersKeepSpaces(input) {
-            const letters = input.replace(/\s+/g, '').split("");  // Extract letters only
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            }
-
-            const shuffledLetters = shuffleArray(letters);
-            let letterIndex = 0;
-
-            return input.split("").map(char => {
-                if (char === " ") {
-                    return " ";
-                }
-                return shuffledLetters[letterIndex++];
-            }).join("");
-        }
-    </script>
+    </style>
 </head>
 <body>
-    <h1>Enhanced Reverse Tool</h1>
-    <p>Select an option and enter your text:</p>
-    <label for="version">Option:</label>
-    <select id="version">
-        <option value="1">1: Reverse Characters</option>
-        <option value="2">2: Reverse Word Order</option>
-        <option value="3">3: Reverse Characters in Each Word</option>
-        <option value="4">4: Convert to Uppercase</option>
-        <option value="5">5: Convert to Lowercase</option>
-        <option value="6">6: Capitalize Each Word</option>
-        <option value="7">7: Alternate Upper and Lower Case</option>
-        <option value="8">8: Remove Vowels</option>
-        <option value="9">9: Remove Consonants</option>
-        <option value="10">10: Convert to Leet Speak</option>
-        <option value="11">11: Convert to Pig Latin</option>
-        <option value="12">12: Censor Curse Words</option>
-        <option value="13">13: Show Only Profanity</option>
-        <option value="14">14: Randomize Word Order</option>
-        <option value="15">15: Randomize Letters in Each Word</option>
-        <option value="16">16: Shuffle All Letters But Keep Spaces</option>
-    </select>
-    <br><br>
-        
-    <label for="inputText">Input Text: </label>
-    <input type="text" id="inputText" /><br><br>
-        
-    <button onclick="runReverseTool()">Run</button>
-    
-    <h2>Result:</h2>
-    <p id="result"></p>
+    <div class="container">
+        <h1>Reverse Tool</h1>
+
+        <label for="options">Select an Option:</label>
+        <select id="options">
+            <option value="1">Reverse Characters</option>
+            <option value="2">Reverse Word Order</option>
+            <option value="3">Reverse Characters in Each Word</option>
+            <option value="8">Remove Vowels</option>
+            <option value="9">Remove Consonants</option>
+            <option value="10">Convert to Leet Speak</option>
+            <option value="11">Convert to Pig Latin</option>
+            <option value="12">Censor Profanity</option>
+            <option value="13">Show Only Profanity</option>
+            <option value="14">Randomize Word Order</option>
+            <option value="15">Randomize Letters in Each Word</option>
+            <option value="16">Shuffle All Letters But Keep Spaces</option>
+        </select>
+
+        <label for="inputText">Input Text:</label>
+        <input type="text" id="inputText" />
+
+        <button onclick="runReverseTool()">Run</button>
+
+        <h2>Result:</h2>
+        <p id="result"></p>
+    </div>
+
+    <footer>
+        &copy; 2024 Reverse Tool by [Your Name]
+    </footer>
+
+    <script>
+        function runReverseTool() {
+            var option = document.getElementById("options").value;
+            var inputText = document.getElementById("inputText").value;
+            var resultText = '';
+
+            switch (option) {
+                case "1":
+                    resultText = inputText.split("").reverse().join("");
+                    break;
+                case "2":
+                    resultText = inputText.split(" ").reverse().join(" ");
+                    break;
+                case "3":
+                    resultText = inputText.split(" ").map(word => word.split("").reverse().join("")).join(" ");
+                    break;
+                case "8":
+                    resultText = inputText.replace(/[aeiouAEIOU]/g, '');
+                    break;
+                case "9":
+                    resultText = inputText.replace(/[^aeiouAEIOU\s]/g, '');
+                    break;
+                case "10":
+                    resultText = inputText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5");
+                    break;
+                case "11":
+                    resultText = inputText.split(" ").map(word => {
+                        return word.slice(1) + word[0] + 'ay';
+                    }).join(" ");
+                    break;
+                case "12":  // Censor profanity
+                    resultText = inputText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
+                        const symbols = ['@', '#', '$', '%', '!', '?'];
+                        return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
+                    });
+                    break;
+                case "13":  // Show only profanity
+                    var profanityList = ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"];
+                    resultText = inputText.split(" ").map(word => {
+                        return profanityList.includes(word.toLowerCase()) ? word : '';
+                    }).join(" ");
+                    break;
+                case "14":
+                    var words = inputText.split(" ");
+                    for (let i = words.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [words[i], words[j]] = [words[j], words[i]];
+                    }
+                    resultText = words.join(" ");
+                    break;
+                case "15":
+                    resultText = inputText.split(" ").map(word => {
+                        let chars = word.split("");
+                        for (let i = chars.length - 1; i > 0; i--) {
+                            const j = Math.floor(Math.random() * (i + 1));
+                            [chars[i], chars[j]] = [chars[j], chars[i]];
+                        }
+                        return chars.join("");
+                    }).join(" ");
+                    break;
+                case "16":
+                    var letters = inputText.replace(/\s/g, '').split('');
+                    letters.sort(() => Math.random() - 0.5);
+                    let spacePositions = [];
+                    for (let i = 0; inputText.length > i; i++) {
+                        if (inputText[i] === ' ') spacePositions.push(i);
+                    }
+                    for (let pos of spacePositions) {
+                        letters.splice(pos, 0, ' ');
+                    }
+                    resultText = letters.join('');
+                    break;
+            }
+
+            document.getElementById("result").textContent = resultText;
+        }
+    </script>
 </body>
-</html>
+    </html>
+    
