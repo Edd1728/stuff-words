@@ -72,6 +72,22 @@
             white-space: pre-line;
         }
 
+        .example-section {
+            margin-top: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
         footer {
             text-align: center;
             margin-top: 50px;
@@ -103,7 +119,7 @@
             <option value="19">Convert to Hexadecimal</option>
             <option value="20">Convert to Base64</option>
             <option value="21">Mirror Text</option>
-            <option value="22">Mirror and Reverse Text</option> <!-- New option -->
+            <option value="22">Mirror and Reverse Text</option>
         </select>
 
         <label for="inputText">Input Text:</label>
@@ -113,6 +129,20 @@
 
         <h2>Result:</h2>
         <p id="result"></p>
+
+        <div class="example-section">
+            <h2>Examples Using "Hello World!":</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody id="example-results">
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <footer>
@@ -120,38 +150,112 @@
     </footer>
 
     <script>
+        const exampleText = "Hello World!";
+
+        const transformations = {
+            "1": exampleText.split("").reverse().join(""), // Reverse Characters
+            "2": exampleText.split(" ").reverse().join(" "), // Reverse Word Order
+            "3": exampleText.split(" ").map(word => word.split("").reverse().join("")).join(" "), // Reverse Characters in Each Word
+            "8": exampleText.replace(/[aeiouAEIOU]/g, ''), // Remove Vowels
+            "9": exampleText.replace(/[^aeiouAEIOU\s]/g, ''), // Remove Consonants
+            "10": exampleText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5"), // Leet Speak
+            "11": exampleText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" "), // Pig Latin
+            "12": "No profanity to censor in example", // Censor Profanity
+            "13": "No profanity to show in example", // Show Only Profanity
+            "14": shuffleArray(exampleText.split(" ")).join(" "), // Randomize Word Order
+            "15": exampleText.split(" ").map(word => shuffleArray(word.split("")).join("")).join(" "), // Randomize Letters in Each Word
+            "16": shuffleLettersButKeepSpaces(exampleText), // Shuffle Letters But Keep Spaces
+            "17": swapOppositeAlphabet(exampleText), // Swap Letters with Opposite in Alphabet
+            "18": textToBinary(exampleText), // Convert to Binary
+            "19": textToHexadecimal(exampleText), // Convert to Hexadecimal
+            "20": btoa(exampleText), // Convert to Base64
+            "21": mirrorText(exampleText), // Mirror Text
+            "22": mirrorText(exampleText).split("").reverse().join("") // Mirror and Reverse Text
+        };
+
         function runReverseTool() {
             var option = document.getElementById("options").value;
             var inputText = document.getElementById("inputText").value;
             var resultText = '';
 
-            switch (option) {
-                // Existing options...
-                
-                case "21": // Mirror text
-                    const mirrorMap = {
-                        'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⑁', 'i': 'i', 'j': 'ᒑ',
-                        'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ', 's': 'ƨ', 't': 'ɟ',
-                        'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
-                        'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I', 'J': 'ᒐ',
-                        'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я', 'S': 'Ƨ', 'T': 'T',
-                        'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
-                    };
-                    
-                    resultText = inputText.split("").map(char => {
-                        return mirrorMap[char] || char; // Replace with mirrored character or leave it unchanged
-                    }).join("");
-                    break;
-
-                case "22": // Mirror and reverse text
-                    resultText = inputText.split("").map(char => {
-                        return mirrorMap[char] || char; // Replace with mirrored character or leave it unchanged
-                    }).reverse().join("");
-                    break;
+            // Use the same logic for user input transformations
+            if (transformations[option]) {
+                resultText = transformations[option];
             }
 
             document.getElementById("result").textContent = resultText;
         }
+
+        // Helper functions for transformations
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function shuffleLettersButKeepSpaces(text) {
+            let letters = text.replace(/\s/g, '').split('');
+            letters.sort(() => Math.random() - 0.5);
+            let spacePositions = [];
+            for (let i = 0; text.length > i; i++) {
+                if (text[i] === ' ') spacePositions.push(i);
+            }
+            for (let pos of spacePositions) {
+                letters.splice(pos, 0, ' ');
+            }
+            return letters.join('');
+        }
+
+        function swapOppositeAlphabet(text) {
+            const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+            const reverseAlphabet = 'zyxwvutsrqponmlkjihgfedcba';
+            return text.split("").map(char => {
+                const lower = char.toLowerCase();
+                const index = alphabet.indexOf(lower);
+                if (index === -1) return char;
+                const swapped = reverseAlphabet[index];
+                return char === lower ? swapped : swapped.toUpperCase();
+            }).join("");
+        }
+
+        function textToBinary(text) {
+            return text.split("").map(char => char.charCodeAt(0).toString(2)).join(" ");
+        }
+
+        function textToHexadecimal(text) {
+            return text.split("").map(char => char.charCodeAt(0).toString(16)).join(" ");
+        }
+
+        function mirrorText(text) {
+            const mirrorMap = {
+                'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⑁', 'i': 'i', 'j': 'ᒑ',
+                'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ', 's': 'ƨ', 't': 'ɟ',
+                'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
+                'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I', 'J': 'ᒐ',
+                'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я', 'S': 'Ƨ', 'T': 'T',
+                'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
+            };
+            return text.split("").map(char => mirrorMap[char] || char).join("");
+        }
+
+        // Display the example results
+        window.onload = function() {
+            var exampleResults = document.getElementById("example-results");
+            for (var option in transformations) {
+                var row = document.createElement("tr");
+                var optionCell = document.createElement("td");
+                var resultCell = document.createElement("td");
+
+                optionCell.textContent = "Option " + option;
+                resultCell.textContent = transformations[option];
+
+                row.appendChild(optionCell);
+                row.appendChild(resultCell);
+                exampleResults.appendChild(row);
+            }
+        };
     </script>
 </body>
 </html>
