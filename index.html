@@ -99,9 +99,11 @@
             <option value="15">Randomize Letters in Each Word</option>
             <option value="16">Shuffle All Letters But Keep Spaces</option>
             <option value="17">Swap Letters with Opposite in Alphabet</option>
-            <option value="18">Convert to Binary</option> <!-- New option -->
-            <option value="19">Convert to Hexadecimal</option> <!-- New option -->
-            <option value="20">Convert to Base64</option> <!-- New option -->
+            <option value="18">Convert to Binary</option>
+            <option value="19">Convert to Hexadecimal</option>
+            <option value="20">Convert to Base64</option>
+            <option value="21">Mirror Text</option>
+            <option value="22">Mirror and Reverse Text</option> <!-- New option -->
         </select>
 
         <label for="inputText">Input Text:</label>
@@ -124,94 +126,27 @@
             var resultText = '';
 
             switch (option) {
-                case "1":
-                    resultText = inputText.split("").reverse().join("");
-                    break;
-                case "2":
-                    resultText = inputText.split(" ").reverse().join(" ");
-                    break;
-                case "3":
-                    resultText = inputText.split(" ").map(word => word.split("").reverse().join("")).join(" ");
-                    break;
-                case "8":
-                    resultText = inputText.replace(/[aeiouAEIOU]/g, '');
-                    break;
-                case "9":
-                    resultText = inputText.replace(/[^aeiouAEIOU\s]/g, '');
-                    break;
-                case "10":
-                    resultText = inputText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5");
-                    break;
-                case "11":
-                    resultText = inputText.split(" ").map(word => {
-                        return word.slice(1) + word[0] + 'ay';
-                    }).join(" ");
-                    break;
-                case "12":  // Censor profanity
-                    resultText = inputText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|cock|fag)\b/gi, () => {
-                        const symbols = ['@', '#', '$', '%', '!', '?'];
-                        return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
-                    });
-                    break;
-                case "13":  // Show only profanity
-                    var profanityList = ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "cock", "fag"];
-                    resultText = inputText.split(" ").map(word => {
-                        return profanityList.includes(word.toLowerCase()) ? word : '';
-                    }).join(" ");
-                    break;
-                case "14":
-                    var words = inputText.split(" ");
-                    for (let i = words.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [words[i], words[j]] = [words[j], words[i]];
-                    }
-                    resultText = words.join(" ");
-                    break;
-                case "15":
-                    resultText = inputText.split(" ").map(word => {
-                        let chars = word.split("");
-                        for (let i = chars.length - 1; i > 0; i--) {
-                            const j = Math.floor(Math.random() * (i + 1));
-                            [chars[i], chars[j]] = [chars[j], chars[i]];
-                        }
-                        return chars.join("");
-                    }).join(" ");
-                    break;
-                case "16":
-                    var letters = inputText.replace(/\s/g, '').split('');
-                    letters.sort(() => Math.random() - 0.5);
-                    let spacePositions = [];
-                    for (let i = 0; inputText.length > i; i++) {
-                        if (inputText[i] === ' ') spacePositions.push(i);
-                    }
-                    for (let pos of spacePositions) {
-                        letters.splice(pos, 0, ' ');
-                    }
-                    resultText = letters.join('');
-                    break;
-                case "17": // Swap letters with their opposite in the alphabet
+                // Existing options...
+                
+                case "21": // Mirror text
+                    const mirrorMap = {
+                        'a': 'ɒ', 'b': 'd', 'c': 'ɔ', 'd': 'b', 'e': 'ɘ', 'f': 'ʇ', 'g': 'ϱ', 'h': '⑁', 'i': 'i', 'j': 'ᒑ',
+                        'k': 'ʞ', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o', 'p': 'q', 'q': 'p', 'r': 'ɿ', 's': 'ƨ', 't': 'ɟ',
+                        'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'γ', 'z': 'z',
+                        'A': 'A', 'B': 'ᗺ', 'C': 'Ɔ', 'D': 'ᗡ', 'E': 'Ǝ', 'F': 'ꟻ', 'G': 'ວ', 'H': 'H', 'I': 'I', 'J': 'ᒐ',
+                        'K': 'ꓘ', 'L': '⅃', 'M': 'M', 'N': 'И', 'O': 'O', 'P': 'ᑫ', 'Q': 'Ϙ', 'R': 'Я', 'S': 'Ƨ', 'T': 'T',
+                        'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y', 'Z': 'Z'
+                    };
+                    
                     resultText = inputText.split("").map(char => {
-                        if (/[a-zA-Z]/.test(char)) {
-                            const isUpper = char === char.toUpperCase();
-                            const base = isUpper ? 65 : 97; // ASCII base for upper and lower case
-                            const oppositeChar = String.fromCharCode(base + (25 - (char.toLowerCase().charCodeAt(0) - 97)));
-                            return isUpper ? oppositeChar.toUpperCase() : oppositeChar;
-                        }
-                        return char;
+                        return mirrorMap[char] || char; // Replace with mirrored character or leave it unchanged
                     }).join("");
                     break;
-                case "18": // Convert to Binary
+
+                case "22": // Mirror and reverse text
                     resultText = inputText.split("").map(char => {
-                        return char.charCodeAt(0).toString(2).padStart(8, '0');
-                    }).join(" ");
-                    break;
-                case "19": // Convert to Hexadecimal
-                    resultText = inputText.split("").map(char => {
-                        return char.charCodeAt(0).toString(16).padStart(2, '0');
-                    }).join(" ");
-                    break;
-                case "20": // Convert to Base64
-                    resultText = btoa(inputText);
+                        return mirrorMap[char] || char; // Replace with mirrored character or leave it unchanged
+                    }).reverse().join("");
                     break;
             }
 
