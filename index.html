@@ -98,6 +98,10 @@
             <option value="14">Randomize Word Order</option>
             <option value="15">Randomize Letters in Each Word</option>
             <option value="16">Shuffle All Letters But Keep Spaces</option>
+            <option value="17">Swap Letters with Opposite in Alphabet</option>
+            <option value="18">Convert to Binary</option> <!-- New option -->
+            <option value="19">Convert to Hexadecimal</option> <!-- New option -->
+            <option value="20">Convert to Base64</option> <!-- New option -->
         </select>
 
         <label for="inputText">Input Text:</label>
@@ -144,13 +148,13 @@
                     }).join(" ");
                     break;
                 case "12":  // Censor profanity
-                    resultText = inputText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
+                    resultText = inputText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|cock|fag)\b/gi, () => {
                         const symbols = ['@', '#', '$', '%', '!', '?'];
                         return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
                     });
                     break;
                 case "13":  // Show only profanity
-                    var profanityList = ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"];
+                    var profanityList = ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "cock", "fag"];
                     resultText = inputText.split(" ").map(word => {
                         return profanityList.includes(word.toLowerCase()) ? word : '';
                     }).join(" ");
@@ -185,11 +189,34 @@
                     }
                     resultText = letters.join('');
                     break;
+                case "17": // Swap letters with their opposite in the alphabet
+                    resultText = inputText.split("").map(char => {
+                        if (/[a-zA-Z]/.test(char)) {
+                            const isUpper = char === char.toUpperCase();
+                            const base = isUpper ? 65 : 97; // ASCII base for upper and lower case
+                            const oppositeChar = String.fromCharCode(base + (25 - (char.toLowerCase().charCodeAt(0) - 97)));
+                            return isUpper ? oppositeChar.toUpperCase() : oppositeChar;
+                        }
+                        return char;
+                    }).join("");
+                    break;
+                case "18": // Convert to Binary
+                    resultText = inputText.split("").map(char => {
+                        return char.charCodeAt(0).toString(2).padStart(8, '0');
+                    }).join(" ");
+                    break;
+                case "19": // Convert to Hexadecimal
+                    resultText = inputText.split("").map(char => {
+                        return char.charCodeAt(0).toString(16).padStart(2, '0');
+                    }).join(" ");
+                    break;
+                case "20": // Convert to Base64
+                    resultText = btoa(inputText);
+                    break;
             }
 
             document.getElementById("result").textContent = resultText;
         }
     </script>
 </body>
-    </html>
-    
+</html>
