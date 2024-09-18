@@ -152,35 +152,92 @@
     <script>
         const exampleText = "Hello World!";
 
-        const transformations = {
-            "1": exampleText.split("").reverse().join(""), // Reverse Characters
-            "2": exampleText.split(" ").reverse().join(" "), // Reverse Word Order
-            "3": exampleText.split(" ").map(word => word.split("").reverse().join("")).join(" "), // Reverse Characters in Each Word
-            "8": exampleText.replace(/[aeiouAEIOU]/g, ''), // Remove Vowels
-            "9": exampleText.replace(/[^aeiouAEIOU\s]/g, ''), // Remove Consonants
-            "10": exampleText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5"), // Leet Speak
-            "11": exampleText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" "), // Pig Latin
-            "12": "No profanity to censor in example", // Censor Profanity
-            "13": "No profanity to show in example", // Show Only Profanity
-            "14": shuffleArray(exampleText.split(" ")).join(" "), // Randomize Word Order
-            "15": exampleText.split(" ").map(word => shuffleArray(word.split("")).join("")).join(" "), // Randomize Letters in Each Word
-            "16": shuffleLettersButKeepSpaces(exampleText), // Shuffle Letters But Keep Spaces
-            "17": swapOppositeAlphabet(exampleText), // Swap Letters with Opposite in Alphabet
-            "18": textToBinary(exampleText), // Convert to Binary
-            "19": textToHexadecimal(exampleText), // Convert to Hexadecimal
-            "20": btoa(exampleText), // Convert to Base64
-            "21": mirrorText(exampleText), // Mirror Text
-            "22": mirrorText(exampleText).split("").reverse().join("") // Mirror and Reverse Text
-        };
-
         function runReverseTool() {
             var option = document.getElementById("options").value;
             var inputText = document.getElementById("inputText").value;
             var resultText = '';
 
-            // Use the same logic for user input transformations
-            if (transformations[option]) {
-                resultText = transformations[option];
+            // Apply transformations based on selected option for user input
+            switch (option) {
+                case "1":
+                    resultText = inputText.split("").reverse().join("");
+                    break;
+                case "2":
+                    resultText = inputText.split(" ").reverse().join(" ");
+                    break;
+                case "3":
+                    resultText = inputText.split(" ").map(word => word.split("").reverse().join("")).join(" ");
+                    break;
+                case "8":
+                    resultText = inputText.replace(/[aeiouAEIOU]/g, '');
+                    break;
+                case "9":
+                    resultText = inputText.replace(/[^aeiouAEIOU\s]/g, '');
+                    break;
+                case "10":
+                    resultText = inputText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5");
+                    break;
+                case "11":
+                    resultText = inputText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" ");
+                    break;
+                case "12":
+                    resultText = inputText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
+                        const symbols = ['@', '#', '$', '%', '!', '?'];
+                        return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
+                    });
+                    break;
+                case "13":
+                    var profanityList = ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"];
+                    resultText = inputText.split(" ").map(word => profanityList.includes(word.toLowerCase()) ? word : '').join(" ");
+                    break;
+                case "14":
+                    var words = inputText.split(" ");
+                    for (let i = words.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [words[i], words[j]] = [words[j], words[i]];
+                    }
+                    resultText = words.join(" ");
+                    break;
+                case "15":
+                    resultText = inputText.split(" ").map(word => {
+                        let chars = word.split("");
+                        for (let i = chars.length - 1; i > 0; i--) {
+                            const j = Math.floor(Math.random() * (i + 1));
+                            [chars[i], chars[j]] = [chars[j], chars[i]];
+                        }
+                        return chars.join("");
+                    }).join(" ");
+                    break;
+                case "16":
+                    var letters = inputText.replace(/\s/g, '').split('');
+                    letters.sort(() => Math.random() - 0.5);
+                    let spacePositions = [];
+                    for (let i = 0; inputText.length > i; i++) {
+                        if (inputText[i] === ' ') spacePositions.push(i);
+                    }
+                    for (let pos of spacePositions) {
+                        letters.splice(pos, 0, ' ');
+                    }
+                    resultText = letters.join('');
+                    break;
+                case "17":
+                    resultText = swapOppositeAlphabet(inputText);
+                    break;
+                case "18":
+                    resultText = textToBinary(inputText);
+                    break;
+                case "19":
+                    resultText = textToHexadecimal(inputText);
+                    break;
+                case "20":
+                    resultText = btoa(inputText);
+                    break;
+                case "21":
+                    resultText = mirrorText(inputText);
+                    break;
+                case "22":
+                    resultText = mirrorText(inputText).split("").reverse().join("");
+                    break;
             }
 
             document.getElementById("result").textContent = resultText;
@@ -195,37 +252,23 @@
             return array;
         }
 
-        function shuffleLettersButKeepSpaces(text) {
-            let letters = text.replace(/\s/g, '').split('');
-            letters.sort(() => Math.random() - 0.5);
-            let spacePositions = [];
-            for (let i = 0; text.length > i; i++) {
-                if (text[i] === ' ') spacePositions.push(i);
-            }
-            for (let pos of spacePositions) {
-                letters.splice(pos, 0, ' ');
-            }
-            return letters.join('');
-        }
-
         function swapOppositeAlphabet(text) {
             const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-            const reverseAlphabet = 'zyxwvutsrqponmlkjihgfedcba';
-            return text.split("").map(char => {
-                const lower = char.toLowerCase();
-                const index = alphabet.indexOf(lower);
-                if (index === -1) return char;
-                const swapped = reverseAlphabet[index];
-                return char === lower ? swapped : swapped.toUpperCase();
-            }).join("");
+            const opposite = 'zyxwvutsrqponmlkjihgfedcba';
+            const swapMap = {};
+            for (let i = 0; i < alphabet.length; i++) {
+                swapMap[alphabet[i]] = opposite[i];
+                swapMap[alphabet[i].toUpperCase()] = opposite[i].toUpperCase();
+            }
+            return text.split('').map(char => swapMap[char] || char).join('');
         }
 
         function textToBinary(text) {
-            return text.split("").map(char => char.charCodeAt(0).toString(2)).join(" ");
+            return text.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
         }
 
         function textToHexadecimal(text) {
-            return text.split("").map(char => char.charCodeAt(0).toString(16)).join(" ");
+            return text.split('').map(char => char.charCodeAt(0).toString(16).padStart(2, '0')).join(' ');
         }
 
         function mirrorText(text) {
@@ -242,6 +285,30 @@
 
         // Display the example results
         window.onload = function() {
+            const transformations = {
+                "1": exampleText.split("").reverse().join(""),
+                "2": exampleText.split(" ").reverse().join(" "),
+                "3": exampleText.split(" ").map(word => word.split("").reverse().join("")).join(" "),
+                "8": exampleText.replace(/[aeiouAEIOU]/g, ''),
+                "9": exampleText.replace(/[^aeiouAEIOU\s]/g, ''),
+                "10": exampleText.replace(/a/gi, "4").replace(/e/gi, "3").replace(/i/gi, "1").replace(/o/gi, "0").replace(/s/gi, "5"),
+                "11": exampleText.split(" ").map(word => word.slice(1) + word[0] + 'ay').join(" "),
+                "12": exampleText.replace(/\b(fuck|fucking|fucker|shit|pussy|bitch|retard|retarded|ass|hoe|faggot|nigger|nigga|fag)\b/gi, () => {
+                    const symbols = ['@', '#', '$', '%', '!', '?'];
+                    return Array(4).fill(0).map(() => symbols[Math.floor(Math.random() * symbols.length)]).join('');
+                }),
+                "13": exampleText.split(" ").map(word => ["fuck", "fucking", "fucker", "shit", "pussy", "bitch", "retard", "retarded", "ass", "hoe", "faggot", "nigger", "nigga", "fag"].includes(word.toLowerCase()) ? word : '').join(" "),
+                "14": shuffleArray(exampleText.split(" ")).join(" "),
+                "15": exampleText.split(" ").map(word => shuffleArray(word.split("")).join("")).join(" "),
+                "16": shuffleArray(exampleText.replace(/\s/g, '').split('')).join(''),
+                "17": swapOppositeAlphabet(exampleText),
+                "18": textToBinary(exampleText),
+                "19": textToHexadecimal(exampleText),
+                "20": btoa(exampleText),
+                "21": mirrorText(exampleText),
+                "22": mirrorText(exampleText).split("").reverse().join("")
+            };
+
             var exampleResults = document.getElementById("example-results");
             for (var option in transformations) {
                 var row = document.createElement("tr");
